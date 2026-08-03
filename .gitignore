@@ -47,3 +47,7 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# WhatsApp bot auth session (no subir credenciales)
+baileys_auth/
+baileys_store.json
