@@ -3,13 +3,15 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Lz Ultra Bot - WhatsApp Bot API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: bot
+    description: WhatsApp bot control and monitoring
 paths:
   /healthz:
     get:
@@ -24,6 +26,91 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /bot/status:
+    get:
+      operationId: getBotStatus
+      tags: [bot]
+      summary: Get bot connection status
+      description: Returns the current WhatsApp connection state and uptime
+      responses:
+        "200":
+          description: Bot status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotStatus"
+
+  /bot/qr:
+    get:
+      operationId: getBotQr
+      tags: [bot]
+      summary: Get current QR code
+      description: Returns the current QR code as a base64 data URL for scanning
+      responses:
+        "200":
+          description: QR code available
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotQr"
+        "404":
+          description: No QR code available (already connected or not started)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /bot/logs:
+    get:
+      operationId: getBotLogs
+      tags: [bot]
+      summary: Get recent command logs
+      description: Returns the most recent bot command activity
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: number
+            default: 50
+      responses:
+        "200":
+          description: Command logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CommandLog"
+
+  /bot/stats:
+    get:
+      operationId: getBotStats
+      tags: [bot]
+      summary: Get bot statistics
+      description: Returns total commands processed, top commands, uptime
+      responses:
+        "200":
+          description: Bot statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotStats"
+
+  /bot/restart:
+    post:
+      operationId: restartBot
+      tags: [bot]
+      summary: Restart the bot connection
+      description: Disconnects and reconnects the WhatsApp session
+      responses:
+        "200":
+          description: Restart initiated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BotStatus"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +121,79 @@ components:
       required:
         - status
 
+    BotStatus:
+      type: object
+      required: [state, uptimeSeconds]
+      properties:
+        state:
+          type: string
+          enum: [connecting, qr, connected, disconnected]
+        phoneNumber:
+          type: ["string", "null"]
+        uptimeSeconds:
+          type: number
+        connectedAt:
+          type: ["string", "null"]
+
+    BotQr:
+      type: object
+      required: [qrDataUrl, expiresIn]
+      properties:
+        qrDataUrl:
+          type: string
+          description: Base64 PNG data URL of the QR code
+        expiresIn:
+          type: number
+          description: Seconds until QR expires
+
+    CommandLog:
+      type: object
+      required: [id, timestamp, sender, command, chat, success]
+      properties:
+        id:
+          type: number
+        timestamp:
+          type: string
+        sender:
+          type: string
+        senderName:
+          type: ["string", "null"]
+        command:
+          type: string
+        chat:
+          type: string
+        success:
+          type: boolean
+        errorMessage:
+          type: ["string", "null"]
+
+    BotStats:
+      type: object
+      required: [totalCommands, commandsToday, topCommands, activeChats]
+      properties:
+        totalCommands:
+          type: number
+        commandsToday:
+          type: number
+        activeChats:
+          type: number
+        topCommands:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommandCount"
+
+    CommandCount:
+      type: object
+      required: [command, count]
+      properties:
+        command:
+          type: string
+        count:
+          type: number
+
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string

@@ -30,6 +30,12 @@ async function buildAll() {
     external: [
       "*.node",
       "sharp",
+      "@whiskeysockets/baileys",
+      "qrcode-terminal",
+      "@adiwajshing/keyed-db",
+      "noise-handshake",
+      "libsignal",
+      "@distube/ytdl-core",
       "better-sqlite3",
       "sqlite3",
       "canvas",

@@ -1,45 +1,61 @@
-# [Project name]
+# Lz Ultra Bot v03
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Bot de WhatsApp construido con Baileys. Muestra el QR en la terminal al iniciar y responde comandos con el prefijo `.`.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- `pnpm --filter @workspace/api-server run dev` — inicia el bot (muestra QR en terminal)
+- Auth guardada en `artifacts/api-server/baileys_auth/` — no borrar para mantener la sesión
+- Para cerrar sesión: borra la carpeta `baileys_auth` y reinicia
+
+## Comandos disponibles
+
+| Comando | Descripción |
+|---|---|
+| `.menu` / `.help` | Menú principal con todos los comandos |
+| `.grupo` | Lista de comandos de grupo |
+| `.kick @tag` | Expulsa a un miembro (bot debe ser admin) |
+| `.promote @tag` | Convierte en admin (bot debe ser admin) |
+| `.demote @tag` | Quita el admin (bot debe ser admin) |
+| `.group open/close` | Abre o cierra el grupo (bot debe ser admin) |
+| `.descargas` | Lista de comandos de descarga |
+| `.play <canción>` | Descarga MP3 de YouTube |
+| `.ytmp4 <link>` | Descarga video MP4 de YouTube |
+| `.tiktok <link>` | Descarga TikTok sin marca de agua |
+| `.juegos` | Lista de juegos |
+| `.ppt` | Piedra, papel o tijera |
+| `.topgays` | Top miembros más activos |
+| `.ship @a @b` | Compatibilidad entre dos personas |
+| `.ia <texto>` | Chat con IA (requiere OPENAI_API_KEY) |
+| `.owner` | Info del creador |
+| `.donar` | Link para donar |
+| `.status` | Estado del bot |
+| `.otros` | Lista de otros comandos |
+| `.sticker` / `.s` | Convierte imagen a sticker |
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- WhatsApp: @whiskeysockets/baileys
+- Descargas: @distube/ytdl-core (YouTube), tikwm API (TikTok)
+- Stickers: sharp
+- API server: Express 5
 
-## Where things live
+## Owner info
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
-
-## Architecture decisions
-
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
-
-## Product
-
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Nombre: LzSunshiNe
+- WhatsApp: +31 6 29049445
+- Bot: Lz Ultra Bot v03
+- Prefijo: `.`
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Sin panel de administración — el bot corre solo en el servidor
+- Prefijo de comandos: `.`
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
-
-## Pointers
-
-- See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+- Para .ia necesitas configurar la variable de entorno `OPENAI_API_KEY`
+- Los comandos de grupo (kick, promote, demote, group open/close) requieren que el bot sea administrador del grupo
+- YouTube a veces bloquea las descargas; usa https://cobalt.tools como alternativa
+- La autenticación se guarda en `baileys_auth/`. Si la sesión se pierde, borra esa carpeta y reinicia para ver el QR de nuevo
