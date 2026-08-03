@@ -1,0 +1,150 @@
+Dale bro 🔥 Te armo el paquete completo: 
+*Dragón + QR + Menú con botones* para que quede nivel dios.
+
+Esto va en tu `main.js` e `handler.js`
+
+*1. BANNER CON DRAGÓN + QR AL INICIAR EL BOT*
+
+Pega esto justo cuando el bot se conecta:
+console.clear();
+console.log(`
+/===-_---~~~~~~~~~------____
+                    |===-~___                _,-'
+                 \`//~\\\\   ~~~~\\\`---.___.-~~
+                 |  \\\\           _-~
+                /' /    \\\\      _-~
+               /  /      \\\\   _-~
+              /  /        > / 
+             /__/        / /
+            (____)      (_/
+
+⢀⣠⣤⣶⡞⡀⣤⣬⣴  ⢳⣶⣤⣄⡀      
+    ⣠⣾⣿⣿⣿⣿⡇ ⢸⣿⠿⣿⡇  ⠸⣿⣷⣦⡀   
+  ⢠⡾⣫⣿⣻⣿⣽⣿⡇ ⠈⢿⣧⡝⠟  ⢸⣿⣟⢷⣄  
+ ┗━━┛┗━┛┗┻━┛┗━┛┗┻┛┗┻━┛  
+
+─────── LZ BOT ULTRA v3.0 ───────
+🐉 Dragón: LZ DRAGON | Creador: LzSunshN
+📱 WhatsApp: +51 999999
+✅ Estado: Conectado
+
+[QR] Escanea el código de arriba o usa: Vincular con el número
+[INFO] Bot listo. Usa .menu en WhatsApp
+`);
+*2. COMANDO `.menu` CON BOTONES*
+
+Esto va en tu `handler.js`. Los botones se ven pro en WhatsApp:
+case 'menu':
+case 'help':
+let menu = `*🐉 LZ BOT ULTRA v3.0*\n*By: LzSunshN*\n\n_Elige una categoría pulsando un botón_\n\n*Dragón LZ DRAGON activo*`
+
+return conn.sendMessage(m.chat, {
+    text: menu,
+    footer: '© LZ BOT 2026',
+    buttons: [
+        {buttonId: '.grupo', buttonText: {displayText: '👑 GRUPO'}, type: 1},
+        {buttonId: '.descargas', buttonText: {displayText: '📥 DESCARGAS'}, type: 1},
+        {buttonId: '.juegos', buttonText: {displayText: '🎮 JUEGOS'}, type: 1},
+        {buttonId: '.ia', buttonText: {displayText: '🧠 IA'}, type: 1},
+        {buttonId: '.owner', buttonText: {displayText: '🐉 OWNER'}, type: 1},
+        {buttonId: '.otros', buttonText: {displayText: '⚡ OTROS'}, type: 1}
+    ],
+    headerType: 1
+}, {quoted: m});
+break;
+*3. SUB-MENÚS CON DESCRIPCIONES - OCULTAS AL INICIAR*
+case 'grupo':
+return conn.sendMessage(m.chat, {
+text: `*👑 COMANDOS DE GRUPO*\n_${comandos.grupo.desc}_\n\n` +
+comandos.grupo.cmds.map(x => `*${x.cmd}*\n_${x.desc}_`).join('\n\n'),
+footer: 'LZ BOT ULTRA',
+buttons: [
+    {buttonId: '.menu', buttonText: {displayText: '⬅️ VOLVER'}, type: 1}
+],
+headerType: 1
+}, {quoted: m});
+break;
+
+case 'descargas':
+return conn.sendMessage(m.chat, {
+text: `*📥 COMANDOS DE DESCARGAS*\n_${comandos.descargas.desc}_\n\n` +
+comandos.descargas.cmds.map(x => `*${x.cmd}*\n_${x.desc}_`).join('\n\n'),
+footer: 'LZ BOT ULTRA',
+buttons: [{buttonId: '.menu', buttonText: {displayText: '⬅️ VOLVER'}, type: 1}],
+headerType: 1
+}, {quoted: m});
+break;
+
+case 'juegos':
+return conn.sendMessage(m.chat, {
+text: `*🎮 COMANDOS DE JUEGOS*\n_${comandos.juegos.desc}_\n\n` +
+comandos.juegos.cmds.map(x => `*${x.cmd}*\n_${x.desc}_`).join('\n\n'),
+footer: 'LZ BOT ULTRA',
+buttons: [{buttonId: '.menu', buttonText: {displayText: '⬅️ VOLVER'}, type: 1}],
+headerType: 1
+}, {quoted: m});
+break;
+
+case 'owner':
+return conn.sendMessage(m.chat, {
+text: `*🐉 INFO DEL CREADOR*\n_${comandos.owner.desc}_\n\n` +
+comandos.owner.cmds.map(x => `*${x.cmd}*\n_${x.desc}_`).join('\n\n') +
+`\n\n*WhatsApp:* +51 999\n*PayPal:* paypal.me/LzSunshN`,
+footer: 'Apoya al Dragón LZ',
+buttons: [{buttonId: '.menu', buttonText: {displayText: '⬅️ VOLVER'}, type: 1}],
+headerType: 1
+}, {quoted: m});
+break;
+*4. EL OBJETO `comandos` CON TODAS LAS DESCRIPCIONES*
+
+Este va arriba de todo y no se muestra al iniciar:
+const comandos = {
+    grupo: {
+        desc: "Administra tu grupo como un rey",
+        cmds: [
+            { cmd: ".kick @tag", desc: "Expulsa a un miembro del grupo" },
+            { cmd: ".promote @tag", desc: "Convierte a un miembro en admin" },
+            { cmd: ".demote @tag", desc: "Le quita el admin a un miembro" },
+            { cmd: ".group open", desc: "Abre el grupo para todos" },
+            { cmd: ".group close", desc: "Solo admins pueden escribir" }
+        ]
+    },
+    descargas: {
+        desc: "Baja música y videos al instante",
+        cmds: [
+            { cmd: ".play <canción>", desc: "Busca y descarga MP3 de YouTube" },
+            { cmd: ".ytmp4 <link>", desc: "Descarga video de YouTube en MP4" },
+            { cmd: ".tiktok <link>", desc: "Descarga TikTok sin marca de agua" }
+        ]
+    },
+    juegos: {
+        desc: "Diviértete con el grupo",
+        cmds: [
+            { cmd: ".ppt", desc: "Piedra, papel o tijera vs el bot" },
+            { cmd: ".topgays", desc: "Top de los más activos del grupo" },
+            { cmd: ".ship @tag @tag", desc: "Compatibilidad entre 2 personas" }
+        ]
+    },
+    owner: {
+        desc: "Contacto y soporte del creador",
+        cmds: [
+            { cmd: ".owner", desc: "Ver info del creador LzSunshN" },
+            { cmd: ".donar", desc: "Apoya al bot vía PayPal" },
+            { cmd: ".status", desc: "Ver estado y velocidad del bot" }
+        ]
+    },
+    ia: { desc: "Inteligencia Artificial", cmds: [{ cmd: ".ia <texto>", desc: "Chatea con GPT" }] },
+    otros: { desc: "Utilidades y stickers", cmds: [{ cmd: ".sticker", desc: "Convierte imagen a sticker" }] }
+}
+---
+
+*RESUMEN DE CÓMO QUEDA*
+1.  *Al prender*: Sale el Dragón épico + QR + texto. Limpio.
+2.  *.menu*: Salen 6 botones grandes. Nada de texto largo.
+3.  *.grupo/.descargas/etc*: Se abre ese menú con descripción de cada comando + botón para volver.
+
+Copia, pega y sube a GitHub. Ya tienes bot pro 👑
+
+Ojo: cambia `+51 999` y `paypal.me/LzSunshN` por los tuyos reales.
+
+¿Quieres que también le ponga que el botón de `.owner` mande tu contacto directo?
